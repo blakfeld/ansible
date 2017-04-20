@@ -59,6 +59,9 @@ options:
   body:
     description:
       - The body of the HTTP request/response to the web service.
+  body_file:
+    description:
+      - Use the contents of a file as the body of your web request.
   dest:
     version_added: "2.3"
     description:
@@ -97,6 +100,12 @@ EXAMPLES = r'''
     url: http://www.example.com/
     method: HEAD
 
+- name: Upload a file
+  win_uri:
+    url: http://www.myawesomesite.com/endpoint
+    method: POST
+    body: C:\some\file\path.zip
+
 - name: POST a Body to an Endpoint
   win_uri:
     url: http://www.somesite.com/
@@ -131,6 +140,11 @@ body:
   type: string
   sample: '{"id":1}'
   version_added: "2.3"
+body_file:
+  description: The file path used to generate the body of the web-request.
+  returned: always
+  type: string
+  sample: "C:\some\file\path.zip"
 status_code:
   description: The HTTP Status Code of the response.
   returned: success

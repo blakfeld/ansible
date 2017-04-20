@@ -38,6 +38,7 @@ $content_type = Get-AnsibleParam -obj $params -name "content_type" -type "str"
 $headers = Get-AnsibleParam -obj $params -name "headers" -type "str"
 # TODO: Why is this not a normal dictionary ?
 $body = Get-AnsibleParam -obj $params -name "body" -type "str"
+$body_file = Get-AnsibleParam -obj $params -name "body_file" -type "str"
 $dest = Get-AnsibleParam -obj $params -name "dest" -type "path"
 $use_basic_parsing = Get-AnsibleParam -obj $params -name "use_basic_parsing" -type "bool" -default $true
 
@@ -56,6 +57,15 @@ $webrequest_opts = @{
     Method = $method
     Uri = $url
     UseBasicParsing = $use_basic_parsing
+}
+
+if ($file -ne $null) {
+    if (Test-Path $body_file -PathType leaf) {
+        $webrequest_opts.InFile = $body_file
+        Set-Attr $result.win_uri "body_file" $body_file
+    } else {
+        Fail-Json $result "\"$body_file\" does not exist!"
+    }
 }
 
 if ($headers -ne $null) {
